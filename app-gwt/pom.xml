@@ -1,0 +1,85 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <artifactId>app-gwt</artifactId>
+  <packaging>jar</packaging>
+
+  <parent>
+      <groupId>some.app.org</groupId>
+      <artifactId>app</artifactId>
+      <version>1.0-SNAPSHOT</version>
+  </parent>
+
+  <properties>
+    <gwt.localWorkers>2</gwt.localWorkers>
+    <gwt.compileReport>false</gwt.compileReport>
+    <gwt.draftCompiling>false</gwt.draftCompiling>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.google.gwt</groupId>
+      <artifactId>gwt-user</artifactId>
+      <version>2.7.0</version>
+    </dependency>
+    <dependency>
+      <groupId>com.google.gwt</groupId>
+      <artifactId>gwt-codeserver</artifactId>
+      <version>2.7.0</version>
+    </dependency>
+
+  </dependencies>
+
+  <build>
+    <finalName>${project.artifactId}</finalName>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <version>2.6</version>
+        <configuration>
+          <appendAssemblyId>true</appendAssemblyId>
+          <descriptor>src/main/assembly/gwt.xml</descriptor>
+        </configuration>
+        <executions>
+          <execution>
+            <id>make-assembly</id>
+            <phase>package</phase>
+            <goals>
+              <goal>attached</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>gwt-maven-plugin</artifactId>
+          <version>2.7.0</version>
+        <executions>
+          <execution>
+            <configuration>
+              <sourceLevel>1.7</sourceLevel>
+              <compileReport>${gwt.compileReport}</compileReport>
+              <logLevel>INFO</logLevel>
+              <disableCastChecking>true</disableCastChecking>
+              <draftCompile>${gwt.draftCompiling}</draftCompile>
+              <style>OBF</style>
+                <extraJvmArgs>-Xmx1024m -Xss16m -DJjava.io.tmpdir=${project.build.directory}/gwt-tmp</extraJvmArgs>
+                <modules>
+                    <module>some.app.org.mySampleApplication.MySampleApplication</module>
+                </modules>
+              <gen>${project.basedir}/target/generated-gwt-sources/java</gen>
+            </configuration>
+              <goals>
+                  <goal>compile</goal>
+              </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+    </plugins>
+
+  </build>
+
+</project>
